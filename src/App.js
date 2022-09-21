@@ -41,15 +41,11 @@ function App() {
 		})
 	}
 
-	const filterExpenses = (year) => {
-		console.log('in app component', year);
-	}
-
 
 	return (
 		<div>
 			<ExpenseControl onAddExpenseData={addExpenseDataHandler} />
-			<Expenses onFilterExpenses={filterExpenses} expenses={expensess} />
+			<Expenses expenses={expensess} />
 		</div>
 	);
 }

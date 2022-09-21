@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import "./ExpenseForm.css";
 
-export default function ExpenseForm({onSavedExpenseData}) {
+export default function ExpenseForm({ onSavedExpenseData }) {
 	// const [changedTitle, setChangedTitle] = useState("");
 	// const [changedPrice, setChangedPrice] = useState("");
 	// const [changedDate, setChangedDate] = useState('');
@@ -11,13 +11,15 @@ export default function ExpenseForm({onSavedExpenseData}) {
 		enteredTitle: "",
 		enteredAmount: "",
 		enteredDate: "",
-  });
-  
-  const {
-    enteredTitle: title,
-    enteredAmount: amount,
-    enteredDate: date,
-  } = userInput;
+	});
+
+	const [showForm, setShowForm] = useState(false);
+
+	const {
+		enteredTitle: title,
+		enteredAmount: amount,
+		enteredDate: date,
+	} = userInput;
 
 	const titleChangeHandler = (event) => {
 		// setChangedTitle(event.target.value);
@@ -47,23 +49,30 @@ export default function ExpenseForm({onSavedExpenseData}) {
 				enteredDate: event.target.value,
 			};
 		});
-  };
-  
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    onSavedExpenseData({
-      title: userInput.enteredTitle,
-      amount: userInput.enteredAmount,
-      date: new Date(userInput.enteredDate),
+	};
+
+	const handleFormSubmit = (event) => {
+		event.preventDefault();
+		onSavedExpenseData({
+			title: userInput.enteredTitle,
+			amount: userInput.enteredAmount,
+			date: new Date(userInput.enteredDate),
 		});
-    setUserInput({
+		setUserInput({
 			enteredTitle: "",
 			enteredAmount: "",
 			enteredDate: "",
 		});
-  }
+		toggleHandler()
+	};
 
-	return (
+	const toggleHandler = () => {
+		setShowForm((prevState) => {
+			return !prevState;
+		});
+	};
+
+	return showForm ? (
 		<form onSubmit={handleFormSubmit}>
 			<div className="new-expense__controls">
 				<div className="new-expense__control">
@@ -76,8 +85,8 @@ export default function ExpenseForm({onSavedExpenseData}) {
 					<input
 						type="number"
 						min="0.01"
-            step="0.01"
-            value={amount}
+						step="0.01"
+						value={amount}
 						onChange={amountChangeHandler}
 					/>
 				</div>
@@ -87,16 +96,19 @@ export default function ExpenseForm({onSavedExpenseData}) {
 					<input
 						type="date"
 						min="2021-1-1"
-            max="2022-1-2"
-            value={date}
+						max="2022-1-2"
+						value={date}
 						onChange={dateChangeHandler}
 					/>
 				</div>
 			</div>
 
 			<div className="new-expense__actions">
+				<button onClick={toggleHandler} type="cancel">Cancel</button>
 				<button type="submit">Submit Expense</button>
 			</div>
 		</form>
+	) : (
+		<button onClick={toggleHandler}>Add New Expense</button>
 	);
 }
